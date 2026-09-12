@@ -284,8 +284,8 @@ closeCorner.Parent = close
 local content = Instance.new("Frame")
 content.Name = "Content"
 
-content.Size = UDim2.new(0, 285, 0, 215)
-content.Position = UDim2.new(0, 165, 0, 65)
+content.Size = UDim2.new(0, 440, 0, 215)
+content.Position = UDim2.new(0.5, -220, 0, 65)
 
 content.BackgroundColor3 =
 	Color3.fromRGB(10, 8, 25)
@@ -312,7 +312,7 @@ contentTitle.Size = UDim2.new(1, -30, 0, 40)
 contentTitle.Position = UDim2.new(0, 15, 0, 18)
 
 contentTitle.BackgroundTransparency = 1
-contentTitle.Text = "NEED KEY"
+contentTitle.Text = "WELCOME"
 
 contentTitle.TextColor3 =
 	Color3.fromRGB(255, 255, 255)
@@ -339,7 +339,7 @@ description.Position = UDim2.new(0, 15, 0, 65)
 description.BackgroundTransparency = 1
 
 description.Text =
-	"Scripts or features that require a key."
+	"Select a script to execute or customize your experience."
 
 description.TextColor3 =
 	Color3.fromRGB(225, 225, 235)
