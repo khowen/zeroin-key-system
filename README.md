@@ -278,14 +278,38 @@ closeCorner.CornerRadius = UDim.new(0, 9)
 closeCorner.Parent = close
 
 --==================================================
+-- SIDEBAR
+--==================================================
+
+local sidebar = Instance.new("Frame")
+sidebar.Name = "Sidebar"
+
+sidebar.Size = UDim2.new(0, 145, 0, 215)
+sidebar.Position = UDim2.new(0, 10, 0, 65)
+
+sidebar.BackgroundColor3 =
+	Color3.fromRGB(10, 8, 25)
+
+sidebar.BackgroundTransparency = 0.30
+
+sidebar.BorderSizePixel = 0
+
+sidebar.ZIndex = 10
+sidebar.Parent = main
+
+local sidebarCorner = Instance.new("UICorner")
+sidebarCorner.CornerRadius = UDim.new(0, 10)
+sidebarCorner.Parent = sidebar
+
+--==================================================
 -- CONTENT
 --==================================================
 
 local content = Instance.new("Frame")
 content.Name = "Content"
 
-content.Size = UDim2.new(0, 440, 0, 215)
-content.Position = UDim2.new(0.5, -220, 0, 65)
+content.Size = UDim2.new(0, 285, 0, 215)
+content.Position = UDim2.new(0, 165, 0, 65)
 
 content.BackgroundColor3 =
 	Color3.fromRGB(10, 8, 25)
@@ -312,7 +336,7 @@ contentTitle.Size = UDim2.new(1, -30, 0, 40)
 contentTitle.Position = UDim2.new(0, 15, 0, 18)
 
 contentTitle.BackgroundTransparency = 1
-contentTitle.Text = "WELCOME"
+contentTitle.Text = "STEAL AN EGG"
 
 contentTitle.TextColor3 =
 	Color3.fromRGB(255, 255, 255)
@@ -333,18 +357,18 @@ contentTitle.Parent = content
 local description = Instance.new("TextLabel")
 description.Name = "Description"
 
-description.Size = UDim2.new(1, -30, 0, 100)
-description.Position = UDim2.new(0, 15, 0, 65)
+description.Size = UDim2.new(1, -30, 0, 50)
+description.Position = UDim2.new(0, 15, 0, 60)
 
 description.BackgroundTransparency = 1
 
 description.Text =
-	"Select a script to execute or customize your experience."
+	"Select an egg stealing method to execute."
 
 description.TextColor3 =
 	Color3.fromRGB(225, 225, 235)
 
-description.TextSize = 13
+description.TextSize = 12
 description.Font = Enum.Font.Gotham
 
 description.TextWrapped = true
@@ -357,6 +381,127 @@ description.TextYAlignment =
 
 description.ZIndex = 15
 description.Parent = content
+
+--==================================================
+-- STEAL METHODS TABLE
+--==================================================
+
+local stealMethods = {
+
+	{
+		id = "StealFast",
+		name = "⚡ FAST STEAL",
+		description = "Quick egg stealing method."
+	},
+
+	{
+		id = "StealSilent",
+		name = "🤫 SILENT STEAL",
+		description = "Undetectable egg stealing."
+	},
+
+	{
+		id = "StealMass",
+		name = "🔥 MASS STEAL",
+		description = "Steal all eggs at once."
+	},
+
+	{
+		id = "StealAuto",
+		name = "🤖 AUTO STEAL",
+		description = "Automatic egg stealing loop."
+	}
+
+}
+
+--==================================================
+-- STEAL BUTTONS
+--==================================================
+
+local buttons = {}
+
+for i, data in ipairs(stealMethods) do
+
+	local button = Instance.new("TextButton")
+
+	button.Name = data.id .. "Button"
+
+	button.Size =
+		UDim2.new(1, -16, 0, 34)
+
+	button.Position = UDim2.new(
+		0,
+		8,
+		0,
+		8 + ((i - 1) * 39)
+	)
+
+	button.BackgroundColor3 =
+		Color3.fromRGB(30, 23, 65)
+
+	button.BackgroundTransparency = 0.10
+
+	button.BorderSizePixel = 0
+
+	button.Text = data.name
+
+	button.TextColor3 =
+		Color3.fromRGB(245, 245, 250)
+
+	button.TextSize = 11
+
+	button.Font = Enum.Font.GothamBold
+
+	button.AutoButtonColor = true
+
+	button.ZIndex = 20
+	button.Parent = sidebar
+
+	local buttonCorner = Instance.new("UICorner")
+	buttonCorner.CornerRadius = UDim.new(0, 7)
+	buttonCorner.Parent = button
+
+	button.Activated:Connect(function()
+
+		contentTitle.Text = data.name
+		description.Text = data.description
+
+		for _, otherButton in ipairs(buttons) do
+
+			otherButton.BackgroundColor3 =
+				Color3.fromRGB(30, 23, 65)
+
+			otherButton.BackgroundTransparency = 0.10
+
+		end
+
+		button.BackgroundColor3 =
+			Color3.fromRGB(75, 50, 135)
+
+		button.BackgroundTransparency = 0.02
+
+		-- Execute steal method
+		print("Executing: " .. data.name)
+		-- Add your steal logic here
+
+	end)
+
+	table.insert(buttons, button)
+
+end
+
+--==================================================
+-- DEFAULT BUTTON
+--==================================================
+
+if buttons[1] then
+
+	buttons[1].BackgroundColor3 =
+		Color3.fromRGB(75, 50, 135)
+
+	buttons[1].BackgroundTransparency = 0.02
+
+end
 
 --==================================================
 -- CIRCULAR OPEN BUTTON
