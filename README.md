@@ -278,6 +278,26 @@ closeCorner.CornerRadius = UDim.new(0, 9)
 closeCorner.Parent = close
 
 --==================================================
+-- CATEGORY TABS
+--==================================================
+
+local tabContainer = Instance.new("Frame")
+tabContainer.Name = "TabContainer"
+
+tabContainer.Size = UDim2.new(1, 0, 0, 35)
+tabContainer.Position = UDim2.new(0, 0, 0, 55)
+
+tabContainer.BackgroundColor3 =
+	Color3.fromRGB(8, 6, 20)
+
+tabContainer.BackgroundTransparency = 0.40
+
+tabContainer.BorderSizePixel = 0
+
+tabContainer.ZIndex = 10
+tabContainer.Parent = main
+
+--==================================================
 -- SIDEBAR
 --==================================================
 
@@ -285,7 +305,7 @@ local sidebar = Instance.new("Frame")
 sidebar.Name = "Sidebar"
 
 sidebar.Size = UDim2.new(0, 145, 0, 215)
-sidebar.Position = UDim2.new(0, 10, 0, 65)
+sidebar.Position = UDim2.new(0, 10, 0, 95)
 
 sidebar.BackgroundColor3 =
 	Color3.fromRGB(10, 8, 25)
@@ -309,7 +329,7 @@ local content = Instance.new("Frame")
 content.Name = "Content"
 
 content.Size = UDim2.new(0, 285, 0, 215)
-content.Position = UDim2.new(0, 165, 0, 65)
+content.Position = UDim2.new(0, 165, 0, 95)
 
 content.BackgroundColor3 =
 	Color3.fromRGB(10, 8, 25)
@@ -391,28 +411,133 @@ local stealMethods = {
 	{
 		id = "StealFast",
 		name = "⚡ FAST STEAL",
-		description = "Quick egg stealing method."
+		description = "Quick egg stealing method.",
+		category = "STEAL"
 	},
 
 	{
 		id = "StealSilent",
 		name = "🤫 SILENT STEAL",
-		description = "Undetectable egg stealing."
+		description = "Undetectable egg stealing.",
+		category = "STEAL"
 	},
 
 	{
 		id = "StealMass",
 		name = "🔥 MASS STEAL",
-		description = "Steal all eggs at once."
+		description = "Steal all eggs at once.",
+		category = "STEAL"
 	},
 
 	{
 		id = "StealAuto",
 		name = "🤖 AUTO STEAL",
-		description = "Automatic egg stealing loop."
+		description = "Automatic egg stealing loop.",
+		category = "AUTO"
 	}
 
 }
+
+--==================================================
+-- CATEGORY TABS BUTTONS
+--==================================================
+
+local categoryTabs = {}
+local currentCategory = "STEAL"
+
+local function createCategoryTab(name)
+
+	local tab = Instance.new("TextButton")
+
+	tab.Name = name .. "Tab"
+
+	tab.Size = UDim2.new(0, 100, 1, 0)
+
+	tab.Position = UDim2.new(
+		0,
+		10 + ((#categoryTabs) * 110),
+		0,
+		0
+	)
+
+	tab.BackgroundColor3 =
+		Color3.fromRGB(30, 23, 65)
+
+	tab.BackgroundTransparency = 0.20
+
+	tab.BorderSizePixel = 0
+
+	tab.Text = name
+
+	tab.TextColor3 =
+		Color3.fromRGB(200, 200, 215)
+
+	tab.TextSize = 11
+
+	tab.Font = Enum.Font.GothamBold
+
+	tab.AutoButtonColor = true
+
+	tab.ZIndex = 15
+	tab.Parent = tabContainer
+
+	local tabCorner = Instance.new("UICorner")
+	tabCorner.CornerRadius = UDim.new(0, 6)
+	tabCorner.Parent = tab
+
+	tab.Activated:Connect(function()
+
+		currentCategory = name
+
+		-- Update tab appearance
+		for _, otherTab in ipairs(categoryTabs) do
+
+			otherTab.BackgroundColor3 =
+				Color3.fromRGB(30, 23, 65)
+
+			otherTab.BackgroundTransparency = 0.20
+
+			otherTab.TextColor3 =
+				Color3.fromRGB(200, 200, 215)
+
+		end
+
+		tab.BackgroundColor3 =
+			Color3.fromRGB(75, 50, 135)
+
+		tab.BackgroundTransparency = 0.02
+
+		tab.TextColor3 =
+			Color3.fromRGB(255, 255, 255)
+
+		-- Refresh sidebar buttons
+		for _, button in ipairs(buttons) do
+			button:Destroy()
+		end
+		buttons = {}
+
+		populateButtons(name)
+
+	end)
+
+	table.insert(categoryTabs, tab)
+
+end
+
+createCategoryTab("STEAL")
+createCategoryTab("AUTO")
+
+if categoryTabs[1] then
+
+	categoryTabs[1].BackgroundColor3 =
+		Color3.fromRGB(75, 50, 135)
+
+	categoryTabs[1].BackgroundTransparency = 0.02
+
+	categoryTabs[1].TextColor3 =
+		Color3.fromRGB(255, 255, 255)
+
+end
 
 --==================================================
 -- STEAL BUTTONS
@@ -420,75 +545,85 @@ local stealMethods = {
 
 local buttons = {}
 
-for i, data in ipairs(stealMethods) do
+local function populateButtons(category)
 
-	local button = Instance.new("TextButton")
+	for i, data in ipairs(stealMethods) do
 
-	button.Name = data.id .. "Button"
+		if data.category == category then
 
-	button.Size =
-		UDim2.new(1, -16, 0, 34)
+			local button = Instance.new("TextButton")
 
-	button.Position = UDim2.new(
-		0,
-		8,
-		0,
-		8 + ((i - 1) * 39)
-	)
+			button.Name = data.id .. "Button"
 
-	button.BackgroundColor3 =
-		Color3.fromRGB(30, 23, 65)
+			button.Size =
+				UDim2.new(1, -16, 0, 34)
 
-	button.BackgroundTransparency = 0.10
+			button.Position = UDim2.new(
+				0,
+				8,
+				0,
+				8 + ((#buttons) * 39)
+			)
 
-	button.BorderSizePixel = 0
-
-	button.Text = data.name
-
-	button.TextColor3 =
-		Color3.fromRGB(245, 245, 250)
-
-	button.TextSize = 11
-
-	button.Font = Enum.Font.GothamBold
-
-	button.AutoButtonColor = true
-
-	button.ZIndex = 20
-	button.Parent = sidebar
-
-	local buttonCorner = Instance.new("UICorner")
-	buttonCorner.CornerRadius = UDim.new(0, 7)
-	buttonCorner.Parent = button
-
-	button.Activated:Connect(function()
-
-		contentTitle.Text = data.name
-		description.Text = data.description
-
-		for _, otherButton in ipairs(buttons) do
-
-			otherButton.BackgroundColor3 =
+			button.BackgroundColor3 =
 				Color3.fromRGB(30, 23, 65)
 
-			otherButton.BackgroundTransparency = 0.10
+			button.BackgroundTransparency = 0.10
+
+			button.BorderSizePixel = 0
+
+			button.Text = data.name
+
+			button.TextColor3 =
+				Color3.fromRGB(245, 245, 250)
+
+			button.TextSize = 11
+
+			button.Font = Enum.Font.GothamBold
+
+			button.AutoButtonColor = true
+
+			button.ZIndex = 20
+			button.Parent = sidebar
+
+			local buttonCorner = Instance.new("UICorner")
+			buttonCorner.CornerRadius = UDim.new(0, 7)
+			buttonCorner.Parent = button
+
+			button.Activated:Connect(function()
+
+				contentTitle.Text = data.name
+				description.Text = data.description
+
+				for _, otherButton in ipairs(buttons) do
+
+					otherButton.BackgroundColor3 =
+						Color3.fromRGB(30, 23, 65)
+
+					otherButton.BackgroundTransparency = 0.10
+
+				end
+
+				button.BackgroundColor3 =
+					Color3.fromRGB(75, 50, 135)
+
+				button.BackgroundTransparency = 0.02
+
+				-- Execute steal method
+				print("Executing: " .. data.name)
+				-- Add your steal logic here
+
+			end)
+
+			table.insert(buttons, button)
 
 		end
 
-		button.BackgroundColor3 =
-			Color3.fromRGB(75, 50, 135)
-
-		button.BackgroundTransparency = 0.02
-
-		-- Execute steal method
-		print("Executing: " .. data.name)
-		-- Add your steal logic here
-
-	end)
-
-	table.insert(buttons, button)
+	end
 
 end
+
+populateButtons("STEAL")
 
 --==================================================
 -- DEFAULT BUTTON
@@ -699,4 +834,6 @@ end)
 --==================================================
 -- END
 --==================================================
+```
+
 ```
